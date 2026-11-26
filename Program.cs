@@ -1,4 +1,5 @@
 using cache_decorator;
+using cache_decorator.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSingleton<CacheManager>(); // Registrar o CacheManager
 builder.Services.AddScoped<CacheAspect>();     // Registrar o CacheAspect
 builder.Services.AddScoped<MyClass>(); // Registrar a classe MyClass

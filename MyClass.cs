@@ -1,16 +1,11 @@
+using cache_decorator.Cache;
+
 namespace cache_decorator;
 
-public class MyClass
+public class MyClass(Cache.CacheAspect cacheAspect)
 {
-    private readonly CacheAspect _cacheAspect;
-
-    public MyClass(CacheAspect cacheAspect)
-    {
-        _cacheAspect = cacheAspect;
-    }
-
     // [Cached]
-    private string BuscarCpf(int id)
+    private static string? BuscarCpf(int id)
     {
         return id switch 
         {
@@ -22,8 +17,11 @@ public class MyClass
 
     }
 
-    public string BuscarCpfCached(int id)
+    public async Task<string?> BuscarCpfCachedAsync(int id)
     {
-        return _cacheAspect.ExecuteWithCache(() => BuscarCpf(id), $"cpfCache:{id}");
+        return await cacheAspect.ExecuteWithCacheAsync(
+            () => Task.FromResult(BuscarCpf(id)),
+            $"cache:identificacao:cpf:{id}",
+            CacheDuration.TwentyFiveMinutes);
     }
 }
